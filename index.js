@@ -22,9 +22,9 @@ app.get('/cars', function (req, res) {
     })
   })
 
-app.get('/cars/:name', function (req, res){
-    const name = req.params.name
-    Car.findOne({name: name}).then(function(car){
+app.get('/cars/:modelNumber', function (req, res){
+    const modelNumber = req.params.modelNumber
+    Car.findOne({modelNumber: modelNumber}).then(function(car){
        res.json(car)
     })
 })
@@ -34,25 +34,25 @@ app.post('/cars', function(req,res){
     //res.json(body)
     const newCar = new Car(body)
     newCar.save().then(function(car){
-        res.json(car)
+        res.send(`${car.name} with model number ${car.modelNumber} has been created`)
+        // res.json(car)
     })
   })
 
-  app.delete('/cars', function (req, res){
-      const name = req.body.name
-      console.log(name)
-      if (name === undefined){
+  app.delete('/cars/:modelNumber', function (req, res){
+      const modelNumber = req.params.modelNumber
+      if (modelNumber === undefined){
           res.send("Specify car to delete")
       } else {
-        Car.findOneAndDelete({name: name}).then(function(car){
-            res.send("Car deleted")
-            res.json(car)
+        Car.findOneAndDelete({modelNumber: modelNumber}).then(function(car){
+            res.send(`${car.name} with model Number ${car.modelNumber} has been deleted`)
+            // res.json(car)
         })
       }
       
   })
 
-  app.put('/cars/:name', function (req, res){
+  app.put('/cars/:modelNumber', function (req, res){
       const query = req.params
       Car.findOneAndUpdate(query, req.body ).then(function(car){
           res.json(car)
